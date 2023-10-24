@@ -1,5 +1,5 @@
 import unittest
-from lab1 import peak_length
+from lab1.lab1 import peak_length
 
 
 class TestFunc(unittest.TestCase):
