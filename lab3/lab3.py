@@ -6,17 +6,18 @@ def binary_tree_diameter(tree: BinaryTree) -> int:
     if tree is None:
         return 0
 
-    leaf_diameters = []
+    massive = []
     queue = Queue()
     count = 1
 
     while True:
         if (tree.left is not None) and (tree.right is not None):
-            length_left = cross_for_binary_tree(tree.left)
-            length_right = cross_for_binary_tree(tree.right)
-            for i in range(0, len(length_left)):
-                for j in range(0, len(length_right)):
-                    leaf_diameters.append(length_left[i] + length_right[j])
+            length_left = cross_for_binary_tree(tree.left, 9, False, massive)
+            length_right = cross_for_binary_tree(tree.right, 5, False, massive)
+            if length_right[1] and length_left[3]:
+                return length_left[0] + length_right[2]
+            else:
+                massive.clear()
             if tree.left is not None:
                 if count == 1:
                     queue.put(tree.right)
@@ -34,13 +35,10 @@ def binary_tree_diameter(tree: BinaryTree) -> int:
             else:
                 tree = queue.get()
 
-    return max(leaf_diameters)
 
-
-def cross_for_binary_tree(vertex: BinaryTree) -> list:
+def cross_for_binary_tree(vertex: BinaryTree, point: int, check: bool, massive: list):
     count = 1
     next_counter = 1
-    massive = []
     queue = Queue()
     queue_length = Queue()
     while True:
@@ -58,18 +56,30 @@ def cross_for_binary_tree(vertex: BinaryTree) -> list:
         elif vertex.left is not None:
             count += 1
             vertex = vertex.left
+            if vertex.value == point:
+                check = True
+                massive.append(count)
+                massive.append(check)
+                return massive
         elif vertex.right is not None:
             count += 1
             vertex = vertex.right
+            if vertex.value == point:
+                check = True
+                massive.append(count)
+                massive.append(check)
+                return massive
         else:
-            massive.append(count)
             if queue.empty():
-                break
+                if vertex.value == point:
+                    check = True
+                    massive.append(count)
+                    massive.append(check)
+                    return massive
+                return [0, False]
             else:
                 vertex = queue.get()
                 count = queue_length.get()
-
-    return massive
 
 
 if __name__ == '__main__':
@@ -79,8 +89,8 @@ if __name__ == '__main__':
     root.left.left = BinaryTree(7)
     root.left.right = BinaryTree(4)
     root.left.left.left = BinaryTree(8)
-    # root.left.right.right = BinaryTree(5)
-    # root.left.right.right.right = BinaryTree(6)
+    root.left.right.right = BinaryTree(5)
+    #root.left.right.right.right = BinaryTree(6)
     root.left.left.left.left = BinaryTree(9)
 
     tree2 = BinaryTree(1)
