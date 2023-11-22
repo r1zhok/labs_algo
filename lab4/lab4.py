@@ -41,6 +41,3 @@ def min_distance(size: int, start: list, end: list) -> int:
 
 if __name__ == '__main__':
     print(min_distance(size_of_desk, start_point, end_point))
-
-
-
